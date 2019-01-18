@@ -19,10 +19,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.ConnectException;
-import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
+import java.net.UnknownServiceException;
 
 import javax.net.SocketFactory;
 import javax.net.ssl.SSLSocketFactory;
@@ -127,7 +127,11 @@ public class TCPNetworkModule implements NetworkModule {
 			// This workaround should not cause any harm in general but you might
 			// want to move it in SSLNetworkModule.
 
-			socket.shutdownInput();
+			// shutdownInput throw exception when using ssl
+			try {
+				socket.shutdownInput();
+			} catch(Throwable e) {
+			}
 			socket.close();
 		}
 	}
